@@ -29,7 +29,10 @@ var WordView = Backbone.View.extend({
 						'text-align':'center',
 						float:'left'
 					})
-					.text(string.charAt(i).toUpperCase()));
+					.text(string.charAt(i).toUpperCase()))
+				.css({
+					transition: '0.4s'
+				});
 		}
 		
 		this.listenTo(this.model, 'remove', this.remove);
