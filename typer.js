@@ -37,7 +37,8 @@ var WordView = Backbone.View.extend({
 					})
 					.text(string.charAt(i).toUpperCase()))
 				.css({
-					transition: '0.4s'
+					transition: '0.4s',
+					display: 'flex'
 				});
 		}
 		
