@@ -8,6 +8,9 @@ var Words = Backbone.Collection.extend({
 	model:Word
 });
 
+// declarating initial score
+var score = 0;
+
 var WordView = Backbone.View.extend({
 	initialize: function() {
 		$(this.el).css({position:'absolute'});
@@ -46,6 +49,8 @@ var WordView = Backbone.View.extend({
 			left:this.model.get('x') + 'px'
 		});
 		var highlight = this.model.get('highlight');
+		// rendering score
+		$('#score').html(score)
 		$(this.el).find('div').each(function(index,element) {
 			if(index < highlight) {
 				$(element).css({'font-weight':'bolder','background-color':'#aaa',color:'#fff'});
@@ -81,18 +86,28 @@ var TyperView = Backbone.View.extend({
 				'z-index':'1000'
 			}).keyup(function() {
 				var words = self.model.get('words');
+				var finded = false;
 				for(var i = 0;i < words.length;i++) {
 					var word = words.at(i);
 					var typed_string = $(this).val();
 					var string = word.get('string');
 					if(string.toLowerCase().indexOf(typed_string.toLowerCase()) == 0) {
+						finded = true;
 						word.set({highlight:typed_string.length});
 						if(typed_string.length == string.length) {
 							$(this).val('');
+							// if match with a word, score will be added with word length
+							score += string.length
 						}
 					} else {
 						word.set({highlight:0});
 					}
+				}
+
+				// if no key match, score will be decrased
+				if (!finded) {
+					score -= 1;
+					if (score < 0) score = 0;
 				}
 			});
 		
