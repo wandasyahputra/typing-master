@@ -4,6 +4,9 @@ var Word = Backbone.Model.extend({
 	}
 });
 
+// declarating global variable for store running setInterval()
+var game
+
 var Words = Backbone.Collection.extend({
 	model:Word
 });
@@ -112,6 +115,21 @@ var TyperView = Backbone.View.extend({
 			});
 		
 		$(this.el)
+			// adding start pause button
+			.append($('<div>')
+				.addClass('control-button')
+				.append($('<div>start</div>')
+					.click(function() {
+						if(this.innerHTML === 'start') {
+							this.innerHTML = 'pause'
+							typer.start()
+						} else {
+							this.innerHTML = 'start'
+							typer.pause()
+						}
+					})
+				)
+			)
 			.append(wrapper
 				.append($('<form>')
 					.attr({
@@ -169,9 +187,15 @@ var Typer = Backbone.Model.extend({
 	start: function() {
 		var animation_delay = 100;
 		var self = this;
-		setInterval(function() {
+		// save interval to global variable
+		game = setInterval(function() {
 			self.iterate();
 		},animation_delay);
+	},
+
+	// for pausing game, clearInterval
+	pause: function() {
+		clearInterval(game);
 	},
 	
 	iterate: function() {
